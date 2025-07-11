@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
+	"net/http"
+	"net/netip"
 	"os"
 	"os/signal"
 	"strings"
@@ -23,6 +25,7 @@ import (
 func main() {
 	var cfg config
 	flag.StringVar(&cfg.endpoint, "endpoint", "unix:///tmp/sakuracloud.sock", "gRPC endpoint to connect to the provider")
+	flag.TextVar(&cfg.healthzAddr, "healthz-addr", netip.MustParseAddrPort("0.0.0.0:8080"), "Healthz addr")
 
 	var versionFlag bool
 	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
@@ -38,7 +41,8 @@ func main() {
 }
 
 type config struct {
-	endpoint string
+	endpoint    string
+	healthzAddr netip.AddrPort
 }
 
 const (
@@ -63,13 +67,19 @@ func run(cfg config) int {
 
 	slog.InfoContext(ctx, "Starting provider", "version", Version)
 
-	network, endpoint, err := parseEndpoint(cfg.endpoint)
+	network, addr, err := parseEndpoint(cfg.endpoint)
 	if err != nil {
 		slog.ErrorContext(ctx, "Failed to parse endpoint", "endpoint", cfg.endpoint, "error", err)
 		return 1
 	}
+	if network == "unix" {
+		if err := os.Remove(addr); err != nil && !errors.Is(err, os.ErrNotExist) {
+			slog.ErrorContext(ctx, "Failed to remove existing UDS file", "endpoint", cfg.endpoint, "error", err)
+			return 1
+		}
+	}
 
-	listener, err := net.Listen(network, endpoint)
+	listener, err := net.Listen(network, addr)
 	if err != nil {
 		slog.ErrorContext(ctx, "Failed to listen on UDS", "endpoint", cfg.endpoint, "error", err)
 		return 1
@@ -93,6 +103,26 @@ func run(cfg config) int {
 			slog.InfoContext(ctx, "gRPC server stopped gracefully", "endpoint", cfg.endpoint)
 		} else {
 			slog.WarnContext(ctx, "gRPC server did not stop gracefully", "endpoint", cfg.endpoint)
+		}
+	}()
+
+	// Start healthz server
+	healthzMux := http.NewServeMux()
+	healthzMux.HandleFunc("/livez", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	healthzServ := &http.Server{
+		Addr:    cfg.healthzAddr.String(),
+		Handler: healthzMux,
+	}
+	go func() {
+		if err := healthzServ.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			slog.ErrorContext(ctx, "Failed to start healthz server", "addr", cfg.healthzAddr, "error", err)
+		}
+	}()
+	defer func() {
+		if err := healthzServ.Shutdown(ctx); err != nil {
+			slog.ErrorContext(ctx, "Failed to shutdown healthz server gracefully", "error", err)
 		}
 	}()
 
