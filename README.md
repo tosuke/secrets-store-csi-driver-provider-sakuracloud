@@ -66,7 +66,7 @@ TODO
 
 - Go
 - Docker
-- [`aqua`](https://aquaproj.github.io/)
+- [Aqua](https://aquaproj.github.io/)
 
 ### Running Tests
 
