@@ -1,0 +1,38 @@
+name: tagpr
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tagpr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      tag: ${{ steps.tagpr.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: Songmu/tagpr@v1
+        id: tagpr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-docker-image:
+    needs: [tagpr]
+    if: ${{ needs.tagpr.outputs.tag != '' }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/wf-build-and-push-docker-image.yaml
+    with:
+      image_name: ${{ github.repository }}
+      push: true
+      version: ${{ needs.tagpr.outputs.tag }}
