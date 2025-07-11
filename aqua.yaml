@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
+# aqua - Declarative CLI Version Manager
+# https://aquaproj.github.io/
+# checksum:
+#   enabled: true
+#   require_checksum: true
+#   supported_envs:
+#   - all
+registries:
+- type: standard
+  ref: v4.385.0  # renovate: depName=aquaproj/aqua-registry
+packages:
+- name: sacloud/usacloud@v1.15.0
+- name: kubernetes-sigs/kind@v0.29.0
+- name: helm/helm@v3.18.4
+- name: kubernetes/kubernetes/kubectl@v1.33.2
+- name: bats-core/bats-core@v1.12.0
