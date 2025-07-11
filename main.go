@@ -9,7 +9,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"path"
+	"strings"
 	"syscall"
 	"time"
 
@@ -22,9 +22,7 @@ import (
 
 func main() {
 	var cfg config
-	flag.StringVar(&cfg.providerName, "provider-name", "sakuracloud", "Name of the provider")
-	flag.StringVar(&cfg.providerUDSVolume,
-		"provider-uds-volume-path", "/var/run/kubernetes/secrets-store-csi-providers", "Path to the provider UDS volume")
+	flag.StringVar(&cfg.endpoint, "endpoint", "unix:///tmp/sakuracloud.sock", "gRPC endpoint to connect to the provider")
 
 	var versionFlag bool
 	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
@@ -40,8 +38,7 @@ func main() {
 }
 
 type config struct {
-	providerName      string
-	providerUDSVolume string
+	endpoint string
 }
 
 const (
@@ -64,41 +61,38 @@ func run(cfg config) int {
 	grpcServ := grpc.NewServer(grpc.UnaryInterceptor(logInterceptor()))
 	providerv1alpha1.RegisterCSIDriverProviderServer(grpcServ, server.NewServer(Version, client))
 
-	slog.InfoContext(ctx, "Starting provider", "name", cfg.providerName, "version", Version)
+	slog.InfoContext(ctx, "Starting provider", "version", Version)
 
-	endpoint := path.Join(cfg.providerUDSVolume, cfg.providerName+".sock")
-	if err := os.Remove(endpoint); err != nil && !errors.Is(err, os.ErrNotExist) {
-		slog.ErrorContext(ctx, "Failed to remove existing UDS file", "endpoint", endpoint, "error", err)
+	network, endpoint, err := parseEndpoint(cfg.endpoint)
+	if err != nil {
+		slog.ErrorContext(ctx, "Failed to parse endpoint", "endpoint", cfg.endpoint, "error", err)
 		return 1
 	}
 
-	listener, err := net.Listen("unix", endpoint)
+	listener, err := net.Listen(network, endpoint)
 	if err != nil {
-		slog.ErrorContext(ctx, "Failed to listen on UDS", "endpoint", endpoint, "error", err)
+		slog.ErrorContext(ctx, "Failed to listen on UDS", "endpoint", cfg.endpoint, "error", err)
 		return 1
 	}
 	defer func() {
 		if err := listener.Close(); err != nil && !errors.Is(err, net.ErrClosed) {
-			slog.ErrorContext(ctx, "Failed to close listener", "endpoint", endpoint, "error", err)
-		}
-		if err := os.Remove(endpoint); err != nil && !errors.Is(err, os.ErrNotExist) {
-			slog.ErrorContext(ctx, "Failed to remove UDS file", "endpoint", endpoint, "error", err)
+			slog.ErrorContext(ctx, "Failed to close listener", "endpoint", cfg.endpoint, "error", err)
 		}
 	}()
 
 	go func() {
-		slog.InfoContext(ctx, "gRPC server is starting", "endpoint", endpoint)
+		slog.InfoContext(ctx, "gRPC server is starting", "endpoint", cfg.endpoint)
 		if err := grpcServ.Serve(listener); err != nil {
 			cancel(fmt.Errorf("failed to start gRPC server: %w", err))
 		}
 	}()
 	defer func() {
-		slog.InfoContext(ctx, "Stopping gRPC server", "endpoint", endpoint)
+		slog.InfoContext(ctx, "Stopping gRPC server", "endpoint", cfg.endpoint)
 		gracefully := stopGRPCServer(ctx, grpcServ)
 		if gracefully {
-			slog.InfoContext(ctx, "gRPC server stopped gracefully", "endpoint", endpoint)
+			slog.InfoContext(ctx, "gRPC server stopped gracefully", "endpoint", cfg.endpoint)
 		} else {
-			slog.WarnContext(ctx, "gRPC server did not stop gracefully", "endpoint", endpoint)
+			slog.WarnContext(ctx, "gRPC server did not stop gracefully", "endpoint", cfg.endpoint)
 		}
 	}()
 
@@ -114,6 +108,18 @@ func run(cfg config) int {
 	ctx = shutdownCtx
 
 	return 0
+}
+
+func parseEndpoint(endpoint string) (network, addr string, err error) {
+	lowerEp := strings.ToLower(endpoint)
+	if strings.HasPrefix(lowerEp, "unix://") || strings.HasPrefix(lowerEp, "tcp://") {
+		network, addr, ok := strings.Cut(endpoint, "://")
+		if ok {
+			return network, addr, nil
+		}
+	}
+
+	return "", "", fmt.Errorf("invalid endpoint format: %s", endpoint)
 }
 
 func stopGRPCServer(ctx context.Context, serv *grpc.Server) (gracefully bool) {
@@ -136,8 +142,7 @@ func stopGRPCServer(ctx context.Context, serv *grpc.Server) (gracefully bool) {
 func logInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		start := time.Now()
-		deadline, _ := ctx.Deadline()
-		slog.InfoContext(ctx, "gRPC request received", "method", info.FullMethod, "deadline", time.Until(deadline).String())
+		slog.InfoContext(ctx, "gRPC request received", "method", info.FullMethod)
 		resp, err := handler(ctx, req)
 		status, _ := status.FromError(err)
 		slog.InfoContext(ctx, "gRPC request processed", "method", info.FullMethod, "duration", time.Since(start).String(), "status.code", status.Code().String(), "status.message", status.Message())
