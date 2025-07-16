@@ -8,6 +8,13 @@
   "timezone": "Asia/Tokyo",
   "prConcurrentLimit": 10,
   "platformAutomerge": true,
-  "minimumReleaseAge": "3d"
-}
+  "minimumReleaseAge": "3d",
 
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"],
+      "automerge": true
+    }
+  ]
+}
