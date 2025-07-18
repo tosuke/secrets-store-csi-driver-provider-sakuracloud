@@ -43,4 +43,5 @@ func (m *Secrets) UnmarshalJSON(data []byte) error {
 type Secret struct {
 	VaultID string `yaml:"vaultID,omitempty"`
 	Name    string `yaml:"name"`
+	Version *int   `yaml:"version,omitempty"`
 }
