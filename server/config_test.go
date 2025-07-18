@@ -34,6 +34,25 @@ func TestParse(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "with version",
+			in: `{
+				"csi.storage.k8s.io/pod.name": "test-pod",
+				"csi.storage.k8s.io/pod.namespace": "default",
+				"vaultID": "1234",
+				"secrets": "- name: secret1\n  version: 1\n- vaultID: \"5678\"\n  name: secret2\n  version: 2"
+			}`,
+			want: &server.MountConfig{
+				PodName:      "test-pod",
+				PodNamespace: "default",
+
+				VaultID: "1234",
+				Secrets: server.Secrets{
+					{Name: "secret1", Version: ptr(1)},
+					{VaultID: "5678", Name: "secret2", Version: ptr(2)},
+				},
+			},
+		},
 	}
 
 	for _, tt := range cases {
