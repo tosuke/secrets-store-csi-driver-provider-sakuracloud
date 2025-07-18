@@ -50,3 +50,7 @@ func TestParse(t *testing.T) {
 		})
 	}
 }
+
+func ptr[T any](x T) *T {
+	return &x
+}
