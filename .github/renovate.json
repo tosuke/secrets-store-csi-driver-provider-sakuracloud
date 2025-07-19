@@ -12,6 +12,11 @@
 
   "packageRules": [
     {
+      "matchDepNames": ["aquaproj/aqua", "aquaproj/aqua-registry"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"],
       "automerge": true
