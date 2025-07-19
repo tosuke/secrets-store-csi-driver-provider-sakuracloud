@@ -1,0 +1,19 @@
+# Binary files
+secrets-store-csi-driver-provider-sakuracloud
+
+# Build artifacts
+/dist/
+/build/
+
+# Go build cache
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
