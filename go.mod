@@ -7,7 +7,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/secretmanager-api-go v0.2.1
 	google.golang.org/grpc v1.73.0
-	sigs.k8s.io/secrets-store-csi-driver v1.5.1
+	sigs.k8s.io/secrets-store-csi-driver v1.5.2
 )
 
 require (
