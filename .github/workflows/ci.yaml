@@ -17,6 +17,7 @@ jobs:
       - go-test
       - go-lint
       - build-image
+      - e2e-test
 
   go-test:
     name: Go Test
@@ -41,3 +42,11 @@ jobs:
     with:
       image_name: ${{ github.repository }}
       push: false
+
+  e2e-test:
+    name: E2E Test
+    uses: ./.github/workflows/wf-e2e-test.yaml
+    secrets:
+      SAKURACLOUD_ACCESS_TOKEN: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN }}
+      SAKURACLOUD_ACCESS_TOKEN_SECRET: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN_SECRET }}
+      SAKURACLOUD_TEST_VAULT_ID: ${{ secrets.SAKURACLOUD_TEST_VAULT_ID }}
