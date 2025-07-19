@@ -5,6 +5,9 @@ SAKURACLOUD_ZONE="tk1a"
 PROVIDER_NAMESPACE="kube-system"
 PROVIDER_DOCKER_IMAGE="secrets-store-csi-driver-provider-sakuracloud:test"
 NAMESPACE="default"
+TEST_ID="${TEST_ID:-0}"
+export SECRET1_NAME="test1-${TEST_ID}"
+export SECRET2_NAME="test2-${TEST_ID}"
 
 setup_file() {
   # Install Secrets Store CSI Driver
@@ -34,8 +37,9 @@ setup_file() {
     echo "SAKURACLOUD_VAULT_ID must be set."
     exit 1
   fi
-  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "test1", "Value": "test1value"}}'
-  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "test2", "Value": "test2value"}}'
+  echo "Creating test secrets with ID: $TEST_ID"
+  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "'$SECRET1_NAME'", "Value": "test1value"}}'
+  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "'$SECRET2_NAME'", "Value": "test2value"}}'
 }
 
 teardown_file() {
@@ -52,8 +56,9 @@ teardown_file() {
   kubectl delete --namespace $NAMESPACE pods --all --force
 
   # Delete test secrets
-  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XDELETE -d'{"Secret":{"Name": "test1"}}'
-  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XDELETE -d'{"Secret":{"Name": "test2"}}'
+  echo "Deleting test secrets with ID: $TEST_ID"
+  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XDELETE -d'{"Secret":{"Name": "'$SECRET1_NAME'"}}'
+  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XDELETE -d'{"Secret":{"Name": "'$SECRET2_NAME'"}}'
 }
 
 @test "install sakuracloud provider" {
@@ -73,14 +78,14 @@ teardown_file() {
   kubectl replace --force -f manifest/pod-secrets-store-inline.yaml
   kubectl wait --for condition=Ready --timeout 60s pod --namespace $NAMESPACE secrets-store-inline
 
-  run kubectl exec --namespace $NAMESPACE secrets-store-inline -- cat /mnt/secrets-store/test1
+  run kubectl exec --namespace $NAMESPACE secrets-store-inline -- cat /mnt/secrets-store/$SECRET1_NAME
   [[ "${output//$'\r'}" == "test1value" ]]
 }
 
 @test "rotate secrets" {
-  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "test1", "Value": "test1value-updated"}}'
+  usacloud rest request --zone $SAKURACLOUD_ZONE /secretmanager/vaults/$SAKURACLOUD_VAULT_ID/secrets -XPOST -d'{"Secret":{"Name": "'${SECRET1_NAME}'", "Value": "test1value-updated"}}'
   sleep 30
 
-  run kubectl exec --namespace $NAMESPACE secrets-store-inline -- cat /mnt/secrets-store/test1
+  run kubectl exec --namespace $NAMESPACE secrets-store-inline -- cat /mnt/secrets-store/${SECRET1_NAME}
   [[ "${output//$'\r'}" == "test1value-updated" ]]
 }

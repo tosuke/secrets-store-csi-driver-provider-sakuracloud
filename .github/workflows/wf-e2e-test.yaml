@@ -22,7 +22,6 @@ jobs:
       name: sacloud
       url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     outputs:
-      iv: ${{ steps.encrypt-secrets.outputs.iv }}
       sakuracloud-access-token: ${{ steps.encrypt-secrets.outputs.sakuracloud-access-token }}
       sakuracloud-access-token-secret: ${{ steps.encrypt-secrets.outputs.sakuracloud-access-token-secret }}
       sakuracloud-test-vault-id: ${{ steps.encrypt-secrets.outputs.sakuracloud-test-vault-id }}
@@ -35,22 +34,20 @@ jobs:
           SAKURACLOUD_TEST_VAULT_ID: ${{ secrets.SAKURACLOUD_TEST_VAULT_ID }}
           KEY: ${{ secrets.E2E_SECRET_KEY }}
         run: |
-          IV=$(openssl rand -hex 16)
+          ENCRYPTED_TOKEN=$(echo -n "$SAKURACLOUD_ACCESS_TOKEN" | openssl enc -e -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
+          ENCRYPTED_TOKEN_SECRET=$(echo -n "$SAKURACLOUD_ACCESS_TOKEN_SECRET" | openssl enc -e -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
+          ENCRYPTED_VAULT_ID=$(echo -n "$SAKURACLOUD_TEST_VAULT_ID" | openssl enc -e -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
           {
-            echo "iv=$IV"
-            echo "sakuracloud-access-token=$(echo -n "$SAKURACLOUD_ACCESS_TOKEN" | openssl enc -e -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")"
-            echo "sakuracloud-access-token-secret=$(echo -n "$SAKURACLOUD_ACCESS_TOKEN_SECRET" | openssl enc -e -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")"
-            echo "sakuracloud-test-vault-id=$(echo -n "$SAKURACLOUD_TEST_VAULT_ID" | openssl enc -e -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")"
+            echo "sakuracloud-access-token=$ENCRYPTED_TOKEN"
+            echo "sakuracloud-access-token-secret=$ENCRYPTED_TOKEN_SECRET"
+            echo "sakuracloud-test-vault-id=$ENCRYPTED_VAULT_ID"
           } >> "$GITHUB_OUTPUT"
 
   e2e-test:
     runs-on: ubuntu-latest
     needs: [unseal-secrets]
-    concurrency:
-      group: e2e-test
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         k8s-version:
           - v1.31.6
@@ -75,14 +72,13 @@ jobs:
         id: decrypt-secrets
         env:
           KEY: ${{ secrets.E2E_SECRET_KEY }}
-          IV: ${{ needs.unseal-secrets.outputs.iv }}
           ENCRYPTED_TOKEN: ${{ needs.unseal-secrets.outputs.sakuracloud-access-token }}
           ENCRYPTED_TOKEN_SECRET: ${{ needs.unseal-secrets.outputs.sakuracloud-access-token-secret }}
           ENCRYPTED_VAULT_ID: ${{ needs.unseal-secrets.outputs.sakuracloud-test-vault-id }}
         run: |
-          SAKURACLOUD_ACCESS_TOKEN=$(echo -n "$ENCRYPTED_TOKEN" | openssl enc -d -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")
-          SAKURACLOUD_ACCESS_TOKEN_SECRET=$(echo -n "$ENCRYPTED_TOKEN_SECRET" | openssl enc -d -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")
-          SAKURACLOUD_VAULT_ID=$(echo -n "$ENCRYPTED_VAULT_ID" | openssl enc -d -aes-256-cbc -base64 -A -K "$KEY" -iv "$IV")
+          SAKURACLOUD_ACCESS_TOKEN=$(echo -n "$ENCRYPTED_TOKEN" | openssl enc -d -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
+          SAKURACLOUD_ACCESS_TOKEN_SECRET=$(echo -n "$ENCRYPTED_TOKEN_SECRET" | openssl enc -d -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
+          SAKURACLOUD_VAULT_ID=$(echo -n "$ENCRYPTED_VAULT_ID" | openssl enc -d -aes-256-cbc -pbkdf2 -salt -a -A -k "$KEY")
           {
             echo "sakuracloud-access-token=$SAKURACLOUD_ACCESS_TOKEN"
             echo "sakuracloud-access-token-secret=$SAKURACLOUD_ACCESS_TOKEN_SECRET"
