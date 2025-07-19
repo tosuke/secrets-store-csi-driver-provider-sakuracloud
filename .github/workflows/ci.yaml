@@ -15,11 +15,18 @@ jobs:
     steps: [{ run: exit 1 }]
     needs:
       - go-test
+      - go-lint
       - build-image
 
   go-test:
     name: Go Test
     uses: ./.github/workflows/wf-go-test.yaml
+    with:
+      save-cache: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+  go-lint:
+    name: Go Lint
+    uses: ./.github/workflows/wf-go-lint.yaml
     with:
       save-cache: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
 

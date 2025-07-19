@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.v2.jsonschema.json
+version: "2"
+linters:
+  enable:
+    - errcheck
+    - staticcheck
+    - govet
+    - nakedret
+    - prealloc
+    - unparam
+    - misspell
+    - gocritic
+    - dupl
+    - gocyclo
+    - funlen
+    - bodyclose
+    - durationcheck
+    - errorlint
+    - forcetypeassert
+    - goheader
+    - gomodguard
+    - makezero
+    - nilerr
+    - noctx
+    - perfsprint
+    - reassign
+    - testpackage
+    - tparallel
+    - wastedassign
+formatters:
+  enable:
+    - gofumpt
+    - goimports
