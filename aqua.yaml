@@ -11,6 +11,7 @@ registries:
 - type: standard
   ref: v4.385.0  # renovate: depName=aquaproj/aqua-registry
 packages:
+- name: golangci/golangci-lint@v2.2.2
 - name: sacloud/usacloud@v1.15.0
 - name: kubernetes-sigs/kind@v0.29.0
 - name: helm/helm@v3.18.4
