@@ -90,3 +90,5 @@ gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 sigs.k8s.io/secrets-store-csi-driver v1.5.1 h1:agXZcHDgteybHKtnmwH9uR0bBwrULfNsl4q6XCQx3YI=
 sigs.k8s.io/secrets-store-csi-driver v1.5.1/go.mod h1:drcHdJiveR7a20tuOJwGylJxkwaK4GhVibpT4llZN7A=
+sigs.k8s.io/secrets-store-csi-driver v1.5.2 h1:27gAeqTUraFR+iDjYxbEZibOZu3xgmqTuV8QPr0VZ7k=
+sigs.k8s.io/secrets-store-csi-driver v1.5.2/go.mod h1:zEOySuvGVsPdsgszflWj3OzDRR4SgQe2i1ibjFeahVA=
