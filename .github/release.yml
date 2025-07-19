@@ -2,3 +2,22 @@ changelog:
   exclude:
     labels:
       - tagpr
+  categories:
+    - title: Breaking Changes
+      labels:
+        - major
+    - title: New Features
+      labels:
+        - minor
+    - title: Bug Fixes
+      labels:
+        - bug
+    - title: Other Changes
+      labels:
+        - "*"
+      exclude:
+        labels:
+          - major
+          - minor
+          - bug
+          - tagpr
