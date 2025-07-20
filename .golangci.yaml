@@ -33,3 +33,7 @@ linters:
       - path: _test\.go
         linters:
           - funlen
+formatters:
+  enable:
+    - gofumpt
+    - goimports
