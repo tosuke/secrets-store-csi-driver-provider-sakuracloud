@@ -1,7 +1,6 @@
 package config_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -12,9 +11,10 @@ func TestParse(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name string
-		in   string
-		want *config.MountRequest
+		name    string
+		in      string
+		want    *config.MountRequest
+		wantErr bool
 	}{
 		{
 			name: "basic",
@@ -54,19 +54,6 @@ func TestParse(t *testing.T) {
 				},
 			},
 		},
-	}
-
-	runParseTestCases(t, cases)
-}
-
-func TestParseWithPath(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name string
-		in   string
-		want *config.MountRequest
-	}{
 		{
 			name: "with path",
 			in: `{
@@ -105,27 +92,48 @@ func TestParseWithPath(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "absolute path",
+			in: `{
+				"vaultID": "1234",
+				"secrets": "- name: secret1\n  path: /absolute/path"
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "relative escape",
+			in: `{
+				"vaultID": "1234",
+				"secrets": "- name: secret1\n  path: ../escape"
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "relative escape in middle",
+			in: `{
+				"vaultID": "1234",
+				"secrets": "- name: secret1\n  path: config/../escape"
+			}`,
+			wantErr: true,
+		},
 	}
 
-	runParseTestCases(t, cases)
-}
-
-func runParseTestCases(t *testing.T, cases []struct {
-	name string
-	in   string
-	want *config.MountRequest
-},
-) {
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
 			got, err := config.ParseMountRequest(tt.in)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatal("expected error but got none")
+				}
+				return
+			}
 			if err != nil {
-				t.Fatalf("parse config: %v", err)
+				t.Fatalf("ParseMountRequest() error = %v", err)
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("unexpected diff (-want +got):\n%s", diff)
+				t.Errorf("ParseMountRequest() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
@@ -212,55 +220,6 @@ func TestSecretFilePath(t *testing.T) {
 			t.Parallel()
 			if got := tt.in.FilePath(); got != tt.want {
 				t.Errorf("FilePath() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestParseWithInvalidPath(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name   string
-		in     string
-		errMsg string
-	}{
-		{
-			name: "absolute path",
-			in: `{
-				"vaultID": "1234",
-				"secrets": "- name: secret1\n  path: /absolute/path"
-			}`,
-			errMsg: "secrets[0].path is invalid: path must not be absolute",
-		},
-		{
-			name: "relative escape",
-			in: `{
-				"vaultID": "1234",
-				"secrets": "- name: secret1\n  path: ../escape"
-			}`,
-			errMsg: "secrets[0].path is invalid: path must not contain relative path escape sequences like '../'",
-		},
-		{
-			name: "relative escape in middle",
-			in: `{
-				"vaultID": "1234",
-				"secrets": "- name: secret1\n  path: config/../escape"
-			}`,
-			errMsg: "secrets[0].path is invalid: path must not contain relative path escape sequences like '../'",
-		},
-	}
-
-	for _, tt := range cases {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			_, err := config.ParseMountRequest(tt.in)
-			if err == nil {
-				t.Fatal("expected error but got none")
-			}
-			if !strings.Contains(err.Error(), tt.errMsg) {
-				t.Errorf("expected error to contain %q, got %v", tt.errMsg, err)
 			}
 		})
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -100,7 +101,7 @@ func validatePath(path string) error {
 	}
 
 	// Path must not be absolute
-	if strings.HasPrefix(path, "/") {
+	if filepath.IsAbs(path) {
 		return errors.New("path must not be absolute")
 	}
 

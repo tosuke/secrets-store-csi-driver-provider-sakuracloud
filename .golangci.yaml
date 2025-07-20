@@ -31,3 +31,12 @@ formatters:
   enable:
     - gofumpt
     - goimports
+linters-settings:
+  funlen:
+    lines: 200
+    statements: 100
+issues:
+  exclude-rules:
+    - path: "_test\\.go$"
+      linters:
+        - funlen
