@@ -37,6 +37,7 @@ func (s *Server) Version(ctx context.Context, req *providerv1alpha1.VersionReque
 	}, nil
 }
 
+//nolint:funlen
 func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) (*providerv1alpha1.MountResponse, error) {
 	targetPath := req.GetTargetPath()
 	if targetPath == "" {
@@ -72,12 +73,12 @@ func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) 
 		unveilRequest := sacloudsmv1.Unveil{
 			Name: secret.Name,
 		}
-		
+
 		// Set version if specified
 		if secret.Version != nil {
 			unveilRequest.SetVersion(sacloudsmv1.NewOptNilInt(*secret.Version))
 		}
-		
+
 		unveilResult, err := secretOp.Unveil(ctx, unveilRequest)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "failed to unveil secret %q in vault %q: %v", secret.Name, vaultID, err)

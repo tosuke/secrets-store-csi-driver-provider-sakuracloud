@@ -49,7 +49,7 @@ const (
 	gracefulShutdownTimeout = 5 * time.Second
 )
 
-// nolint: funlen
+//nolint:funlen
 func run(cfg config) int {
 	ctx := context.Background()
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
