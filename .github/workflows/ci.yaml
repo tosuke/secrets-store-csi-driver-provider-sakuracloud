@@ -66,4 +66,6 @@ jobs:
     needs: changes
     if: needs.changes.outputs.e2e == 'true'
     uses: ./.github/workflows/wf-e2e-test.yaml
+    with:
+      is-pr: ${{ github.event_name == 'pull_request' }}
     secrets: inherit
