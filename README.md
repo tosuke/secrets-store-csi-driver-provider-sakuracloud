@@ -32,6 +32,34 @@ TODO
           - name: "my-secret-2"
     ```
 
+2.  **Mount Secrets in a Pod**
+
+    Reference the `SecretProviderClass` in your pod's volume mounts.
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: my-pod
+    spec:
+      containers:
+        - name: my-container
+          image: nginx
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "my-sakuracloud-secrets"
+    ```
+
+    The secrets will be mounted as files in the `/mnt/secrets-store` directory inside the container. Each secret will be available as a separate file using either its `name` or the specified `path` from the secret configuration.
+
 ## Parameters Reference
 
 The `SecretProviderClass` supports the following parameters:
@@ -59,7 +87,7 @@ The `secrets` parameter accepts a YAML string containing a list of secret config
 The `path` parameter has the following constraints:
 - Must be a relative path (cannot start with `/`)
 - Cannot contain path traversal sequences (`../`)
-- Cannot be empty (use `name` if path is not specified)
+- Can be empty (use `name` if path is not specified)
 
 ## Examples
 
@@ -154,34 +182,6 @@ spec:
       - name: "shared-certificate"
         path: "ssl/shared.crt"
 ```
-
-2.  **Mount Secrets in a Pod**
-
-    Reference the `SecretProviderClass` in your pod's volume mounts.
-
-    ```yaml
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: my-pod
-    spec:
-      containers:
-        - name: my-container
-          image: nginx
-          volumeMounts:
-            - name: secrets-store-inline
-              mountPath: "/mnt/secrets-store"
-              readOnly: true
-      volumes:
-        - name: secrets-store-inline
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "my-sakuracloud-secrets"
-    ```
-
-    The secrets will be mounted as files in the `/mnt/secrets-store` directory inside the container. Each secret will be available as a separate file using either its `name` or the specified `path` from the secret configuration.
 
 ## Development
 
