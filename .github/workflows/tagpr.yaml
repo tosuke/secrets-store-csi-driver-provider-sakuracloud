@@ -36,3 +36,4 @@ jobs:
       image_name: ${{ github.repository }}
       push: true
       version: ${{ needs.tagpr.outputs.tag }}
+      save-cache: true

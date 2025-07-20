@@ -13,6 +13,10 @@ on:
       version:
         required: false
         type: string
+      save-cache:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-and-push-image:
@@ -53,6 +57,8 @@ jobs:
           push: ${{ inputs.push }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: ${{ inputs.save-cache && 'type=gha,mode=max' || '' }}
       - name: Attest
         if: ${{ inputs.push }}
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
