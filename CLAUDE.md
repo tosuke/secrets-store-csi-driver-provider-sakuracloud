@@ -8,10 +8,9 @@ This is a Kubernetes Secrets Store CSI Driver provider for Sakura Cloud Secret M
 
 ## Key Architecture Components
 
-- **main.go**: Entry point that starts a gRPC server implementing the CSI Driver Provider interface
+- **cmd/main.go**: Entry point that starts a gRPC server implementing the CSI Driver Provider interface
 - **server/server.go**: Core gRPC server implementing the `Mount` and `Version` methods for the CSI Driver Provider
-- **server/config.go**: Configuration parsing for SecretProviderClass parameters (vaultID, secrets list)
-- **version.go**: Version string definition
+- **config/config.go**: Configuration parsing for SecretProviderClass parameters (vaultID, secrets list)
 
 The provider works by:
 1. Receiving mount requests from the Secrets Store CSI Driver
@@ -28,7 +27,7 @@ go test ./...
 
 # Run end-to-end tests (requires environment variables)
 export SAKURACLOUD_ACCESS_TOKEN="your-access-token"
-export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"  
+export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"
 export SAKURACLOUD_VAULT_ID="your-vault-id"
 make e2e-test
 
@@ -62,7 +61,7 @@ The provider accepts configuration via SecretProviderClass parameters:
 
 ## Testing Architecture
 
-- Unit tests: Standard Go tests in `server/` package
+- Unit tests: Standard Go tests.
 - E2E tests: BATS tests in `e2e/sakuracloud.bats` that:
   - Set up a kind cluster
   - Install Secrets Store CSI Driver via Helm
