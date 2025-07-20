@@ -39,8 +39,8 @@ func (s *Server) Version(ctx context.Context, req *providerv1alpha1.VersionReque
 
 func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) (*providerv1alpha1.MountResponse, error) {
 	var permission fs.FileMode = 0o644 // Default permission
-	if permStr := req.GetPermission(); permStr == "" {
-		permu64, err := strconv.ParseUint(req.GetPermission(), 10, 32)
+	if permStr := req.GetPermission(); permStr != "" {
+		permu64, err := strconv.ParseUint(permStr, 10, 32)
 		if err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "unable to parse permission: %v", permStr)
 		}
