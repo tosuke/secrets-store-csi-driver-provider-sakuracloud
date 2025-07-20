@@ -32,5 +32,32 @@ This project is a provider for the Kubernetes Secrets Store CSI Driver, specific
 
 ## Commit and Pull Request Conventions
 
-- Pull Request titles and commit messages should follow the Conventional Commits specification (https://www.conventionalcommits.org/en/v1.0.0/). This means commit messages should be structured as `<type>(<scope>): <description>`, for example, `feat: add new feature` or `fix: resolve bug`. This helps in generating changelogs and understanding the nature of changes.
+- Pull Request titles and commit messages should follow the Conventional Commits format below.
 - Each commit should represent a single logical change (e.g., a new feature, a bug fix, a documentation update).
+
+### Conventional Commit Format Explained
+
+Conventional Commits is a specification for writing consistent and meaningful commit messages. The format is:
+
+```
+<type>(<scope>): <description>
+```
+
+- **type**: Describes the kind of change. Common types include:
+    - `feat`: A new feature
+    - `fix`: A bug fix
+    - `docs`: Documentation only changes
+    - `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+    - `refactor`: A code change that neither fixes a bug nor adds a feature
+    - `test`: Adding or correcting tests
+    - `chore`: Other changes that don't modify src or test files (build process, auxiliary tools, etc)
+- **scope**: A short description of the area affected (optional), e.g. `server`, `e2e`.
+- **description**: A brief summary of the change.
+
+#### Examples
+
+- `feat(server): add gRPC health check endpoint`
+- `fix(e2e): correct manifest path`
+- `docs: update README for usage`
+
+Using this format makes commit history easier to read and enables automated changelog generation.
