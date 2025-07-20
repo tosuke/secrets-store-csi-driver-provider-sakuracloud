@@ -1,10 +1,10 @@
-package server_test
+package config_test
 
 import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/server"
+	"github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/config"
 )
 
 func TestParse(t *testing.T) {
@@ -13,7 +13,7 @@ func TestParse(t *testing.T) {
 	cases := []struct {
 		name string
 		in   string
-		want *server.MountConfig
+		want *config.MountRequest
 	}{
 		{
 			name: "basic",
@@ -23,12 +23,12 @@ func TestParse(t *testing.T) {
 				"vaultID": "1234",
 				"secrets": "- name: secret1\n- vaultID: \"5678\"\n  name: secret2"
 			}`,
-			want: &server.MountConfig{
+			want: &config.MountRequest{
 				PodName:      "test-pod",
 				PodNamespace: "default",
 
 				VaultID: "1234",
-				Secrets: server.Secrets{
+				Secrets: config.Secrets{
 					{Name: "secret1"},
 					{VaultID: "5678", Name: "secret2"},
 				},
@@ -42,12 +42,12 @@ func TestParse(t *testing.T) {
 				"vaultID": "1234",
 				"secrets": "- name: secret1\n  version: 1\n- vaultID: \"5678\"\n  name: secret2\n  version: 2"
 			}`,
-			want: &server.MountConfig{
+			want: &config.MountRequest{
 				PodName:      "test-pod",
 				PodNamespace: "default",
 
 				VaultID: "1234",
-				Secrets: server.Secrets{
+				Secrets: config.Secrets{
 					{Name: "secret1", Version: ptr(1)},
 					{VaultID: "5678", Name: "secret2", Version: ptr(2)},
 				},
@@ -59,7 +59,7 @@ func TestParse(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := server.ParseConfig([]byte(tt.in))
+			got, err := config.ParseMountRequest(tt.in)
 			if err != nil {
 				t.Fatalf("parse config: %v", err)
 			}

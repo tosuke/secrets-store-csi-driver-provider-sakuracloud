@@ -1,4 +1,4 @@
-package server
+package config
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"github.com/go-faster/yaml"
 )
 
-type MountConfig struct {
+type MountRequest struct {
 	PodName      string `json:"csi.storage.k8s.io/pod.name,omitempty"`
 	PodNamespace string `json:"csi.storage.k8s.io/pod.namespace,omitempty"`
 
@@ -15,9 +15,9 @@ type MountConfig struct {
 	Secrets Secrets `json:"secrets"`
 }
 
-func ParseConfig(data []byte) (*MountConfig, error) {
-	var cfg MountConfig
-	if err := json.Unmarshal(data, &cfg); err != nil {
+func ParseMountRequest(data string) (*MountRequest, error) {
+	var cfg MountRequest
+	if err := json.Unmarshal([]byte(data), &cfg); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal mount config: %w", err)
 	}
 	return &cfg, nil
@@ -41,7 +41,7 @@ func (m *Secrets) UnmarshalJSON(data []byte) error {
 }
 
 type Secret struct {
-	VaultID string `yaml:"vaultID,omitempty"`
-	Name    string `yaml:"name"`
-	Version *int   `yaml:"version,omitempty"`
+	VaultID string `json:"vaultID" yaml:"vaultID,omitempty"`
+	Name    string `json:"name" yaml:"name"`
+	Version *int   `json:"version,omitempty" yaml:"version,omitempty"`
 }
