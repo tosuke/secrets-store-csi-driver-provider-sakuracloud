@@ -27,6 +27,12 @@ linters:
     - testpackage
     - tparallel
     - wastedassign
+    - copyloopvar
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
 formatters:
   enable:
     - gofumpt

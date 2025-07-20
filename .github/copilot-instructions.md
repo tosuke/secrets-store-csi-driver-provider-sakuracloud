@@ -22,6 +22,8 @@ This project is a provider for the Kubernetes Secrets Store CSI Driver, specific
 
 - Unit tests: `go test ./...`
 - End-to-end tests: `make e2e-test`
+- Lint: `golangci-lint run`
+- Format: `golangci-lint fmt`
 
 ## Repository Structure
 

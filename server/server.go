@@ -96,7 +96,7 @@ func retrieveSecret(
 		Version: version,
 	}
 	file := &providerv1alpha1.File{
-		Path:     secret.Name,
+		Path:     secret.FilePath(),
 		Mode:     int32(permission),
 		Contents: []byte(unveilResult.GetValue()),
 	}

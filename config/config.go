@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/go-faster/yaml"
 )
@@ -26,6 +28,9 @@ func ParseMountRequest(data string) (*MountRequest, error) {
 			} else {
 				errs = append(errs, fmt.Errorf("secrets[%d].vaultID is required", i))
 			}
+		}
+		if err := validatePath(secret.Path); err != nil {
+			errs = append(errs, fmt.Errorf("secrets[%d].path is invalid: %w", i, err))
 		}
 	}
 	if len(errs) > 0 {
@@ -67,6 +72,8 @@ type Secret struct {
 	Name string `json:"name" yaml:"name"`
 	// Version is the version of the secret. If not specified, the latest version will be used.
 	Version *int `json:"version,omitempty" yaml:"version,omitempty"`
+	// Path is the relative path where the secret should be mounted. If not specified, the secret name will be used.
+	Path string `json:"path,omitempty" yaml:"path,omitempty"`
 }
 
 func (s *Secret) ID() string {
@@ -75,4 +82,33 @@ func (s *Secret) ID() string {
 		version = strconv.Itoa(*s.Version)
 	}
 	return fmt.Sprintf("vaults/%s/secrets/%s/versions/%s", s.VaultID, s.Name, version)
+}
+
+// FilePath returns the path where the secret should be mounted.
+// If Path is specified, it will be used; otherwise, Name will be used.
+func (s *Secret) FilePath() string {
+	if s.Path != "" {
+		return s.Path
+	}
+	return s.Name
+}
+
+// validatePath validates that the path is a valid relative path within the mount directory.
+func validatePath(path string) error {
+	// Empty path is valid (will use secret name)
+	if path == "" {
+		return nil
+	}
+
+	// Path must not be absolute
+	if filepath.IsAbs(path) {
+		return errors.New("path must not be absolute")
+	}
+
+	// Path must not contain relative path escape sequences
+	if strings.Contains(path, "../") {
+		return errors.New("path must not contain relative path escape sequences like '../'")
+	}
+
+	return nil
 }
