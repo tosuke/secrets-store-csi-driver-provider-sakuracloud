@@ -73,3 +73,41 @@ func TestParse(t *testing.T) {
 func ptr[T any](x T) *T {
 	return &x
 }
+
+func TestSecretID(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name string
+		in   config.Secret
+		want string
+	}{
+		{
+			name: "with version",
+			in: config.Secret{
+				VaultID: "1234",
+				Name:    "secret1",
+				Version: ptr(1),
+			},
+			want: "vaults/1234/secrets/secret1/versions/1",
+		},
+		{
+			name: "without version",
+			in: config.Secret{
+				VaultID: "5678",
+				Name:    "secret2",
+			},
+			want: "vaults/5678/secrets/secret2/versions/latest",
+		},
+	}
+
+	for _, tt := range cases {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tt.in.ID(); got != tt.want {
+				t.Errorf("ID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

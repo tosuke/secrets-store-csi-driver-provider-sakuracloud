@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"io/fs"
 	"strconv"
 
@@ -59,18 +58,7 @@ func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) 
 	ovs := make([]*providerv1alpha1.ObjectVersion, 0, len(cfg.Secrets))
 	files := make([]*providerv1alpha1.File, 0, len(cfg.Secrets))
 	for _, secret := range cfg.Secrets {
-		var vaultID string
-		if secret.VaultID != "" {
-			vaultID = secret.VaultID
-		} else {
-			vaultID = cfg.VaultID
-		}
-
-		if vaultID == "" {
-			return nil, status.Error(codes.InvalidArgument, "vaultID is required")
-		}
-
-		secretOp := sacloudsm.NewSecretOp(s.client, vaultID)
+		secretOp := sacloudsm.NewSecretOp(s.client, secret.VaultID)
 		unveilRequest := sacloudsmv1.Unveil{
 			Name: secret.Name,
 		}
@@ -82,7 +70,7 @@ func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) 
 
 		unveilResult, err := secretOp.Unveil(ctx, unveilRequest)
 		if err != nil {
-			return nil, status.Errorf(codes.Internal, "failed to unveil secret %q in vault %q: %v", secret.Name, vaultID, err)
+			return nil, status.Errorf(codes.Internal, "failed to unveil secret %q in vault %q: %v", secret.Name, secret.VaultID, err)
 		}
 
 		var version string
@@ -90,7 +78,7 @@ func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) 
 			version = strconv.FormatInt(int64(ver), 10)
 		}
 		ovs = append(ovs, &providerv1alpha1.ObjectVersion{
-			Id:      fmt.Sprintf("vaults/%s/secrets/%s", vaultID, secret.Name),
+			Id:      secret.ID(),
 			Version: version,
 		})
 		files = append(files, &providerv1alpha1.File{

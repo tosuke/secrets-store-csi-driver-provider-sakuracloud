@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/go-faster/yaml"
 )
@@ -66,4 +67,12 @@ type Secret struct {
 	Name string `json:"name" yaml:"name"`
 	// Version is the version of the secret. If not specified, the latest version will be used.
 	Version *int `json:"version,omitempty" yaml:"version,omitempty"`
+}
+
+func (s *Secret) ID() string {
+	version := "latest"
+	if s.Version != nil {
+		version = strconv.Itoa(*s.Version)
+	}
+	return fmt.Sprintf("vaults/%s/secrets/%s/versions/%s", s.VaultID, s.Name, version)
 }
