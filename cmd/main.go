@@ -32,7 +32,6 @@ func main() {
 
 	flag.Parse()
 	if versionFlag {
-		//nolint: forbidigo
 		fmt.Println("Version:", Version)
 		return
 	}
@@ -49,80 +48,30 @@ const (
 	gracefulShutdownTimeout = 5 * time.Second
 )
 
-//nolint:funlen
 func run(cfg config) int {
 	ctx := context.Background()
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	ctx, cancel := context.WithCancelCause(ctx)
-	defer cancel(nil)
 
-	client, err := sacloudsm.NewClient()
+	slog.InfoContext(ctx, "Starting provider", "version", Version, "endpoint", cfg.endpoint)
+	shutdownProvider, err := setupProvider(ctx, cfg)
 	if err != nil {
-		slog.ErrorContext(ctx, "Failed to create Secret Manager client", "error", err)
-		return 1
-	}
-
-	grpcServ := grpc.NewServer(grpc.UnaryInterceptor(logInterceptor()))
-	providerv1alpha1.RegisterCSIDriverProviderServer(grpcServ, server.NewServer(Version, client))
-
-	slog.InfoContext(ctx, "Starting provider", "version", Version)
-
-	network, addr, err := parseEndpoint(cfg.endpoint)
-	if err != nil {
-		slog.ErrorContext(ctx, "Failed to parse endpoint", "endpoint", cfg.endpoint, "error", err)
-		return 1
-	}
-	if network == "unix" {
-		if err := os.Remove(addr); err != nil && !errors.Is(err, os.ErrNotExist) {
-			slog.ErrorContext(ctx, "Failed to remove existing UDS file", "endpoint", cfg.endpoint, "error", err)
-			return 1
-		}
-	}
-
-	listener, err := net.Listen(network, addr)
-	if err != nil {
-		slog.ErrorContext(ctx, "Failed to listen on UDS", "endpoint", cfg.endpoint, "error", err)
+		slog.ErrorContext(ctx, "Failed to setup provider", "error", err)
 		return 1
 	}
 	defer func() {
-		if err := listener.Close(); err != nil && !errors.Is(err, net.ErrClosed) {
-			slog.ErrorContext(ctx, "Failed to close listener", "endpoint", cfg.endpoint, "error", err)
+		slog.InfoContext(ctx, "Stopping provider", "endpoint", cfg.endpoint)
+		if err := shutdownProvider(ctx); err != nil && errors.Is(err, errForcedShutdown) {
+			slog.WarnContext(ctx, "Provider shutdown was forced")
+		} else if err != nil {
+			slog.ErrorContext(ctx, "Failed to shutdown provider", "error", err)
 		}
 	}()
 
-	go func() {
-		slog.InfoContext(ctx, "gRPC server is starting", "endpoint", cfg.endpoint)
-		if err := grpcServ.Serve(listener); err != nil {
-			cancel(fmt.Errorf("failed to start gRPC server: %w", err))
-		}
-	}()
+	shutdownHealthz := setupHealthzServer(ctx, cfg)
 	defer func() {
-		slog.InfoContext(ctx, "Stopping gRPC server", "endpoint", cfg.endpoint)
-		gracefully := stopGRPCServer(ctx, grpcServ)
-		if gracefully {
-			slog.InfoContext(ctx, "gRPC server stopped gracefully", "endpoint", cfg.endpoint)
-		} else {
-			slog.WarnContext(ctx, "gRPC server did not stop gracefully", "endpoint", cfg.endpoint)
-		}
-	}()
-
-	// Start healthz server
-	healthzMux := http.NewServeMux()
-	healthzMux.HandleFunc("/livez", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-	healthzServ := &http.Server{
-		Addr:    cfg.healthzAddr.String(),
-		Handler: healthzMux,
-	}
-	go func() {
-		if err := healthzServ.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			slog.ErrorContext(ctx, "Failed to start healthz server", "addr", cfg.healthzAddr, "error", err)
-		}
-	}()
-	defer func() {
-		if err := healthzServ.Shutdown(ctx); err != nil {
+		slog.InfoContext(ctx, "Stopping healthz server", "addr", cfg.healthzAddr)
+		if err := shutdownHealthz(ctx); err != nil {
 			slog.ErrorContext(ctx, "Failed to shutdown healthz server gracefully", "error", err)
 		}
 	}()
@@ -141,6 +90,72 @@ func run(cfg config) int {
 	return 0
 }
 
+type shutdownFunc func(context.Context) error
+
+func setupProvider(ctx context.Context, cfg config) (shutdownFunc, error) {
+	client, err := sacloudsm.NewClient()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Secret Manager client: %w", err)
+	}
+
+	grpcServ := grpc.NewServer(grpc.UnaryInterceptor(logInterceptor()))
+	providerv1alpha1.RegisterCSIDriverProviderServer(grpcServ, server.NewServer(Version, client))
+
+	network, addr, err := parseEndpoint(cfg.endpoint)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse endpoint: %w", err)
+	}
+	if network == "unix" {
+		if err := os.Remove(addr); err != nil && !errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("failed to remove existing UDS file: %w", err)
+		}
+	}
+
+	listener, err := net.Listen(network, addr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to listen on UDS: %w", err)
+	}
+
+	go func() {
+		if err := grpcServ.Serve(listener); err != nil {
+			slog.ErrorContext(ctx, "Failed to start gRPC server", "error", err)
+		}
+	}()
+
+	return func(ctx context.Context) error {
+		stopErr := stopGRPCServer(ctx, grpcServ)
+
+		var closeErr error
+		if err := listener.Close(); err != nil && !errors.Is(err, net.ErrClosed) {
+			closeErr = err
+		}
+		return errors.Join(stopErr, closeErr)
+	}, nil
+}
+
+func setupHealthzServer(ctx context.Context, cfg config) shutdownFunc {
+	healthzMux := http.NewServeMux()
+	healthzMux.HandleFunc("/livez", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	healthzServ := &http.Server{
+		Addr:    cfg.healthzAddr.String(),
+		Handler: healthzMux,
+	}
+	go func() {
+		if err := healthzServ.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			slog.ErrorContext(ctx, "Failed to start healthz server", "addr", cfg.healthzAddr, "error", err)
+		}
+	}()
+
+	return func(ctx context.Context) error {
+		if err := healthzServ.Shutdown(ctx); err != nil {
+			return fmt.Errorf("failed to shutdown healthz server gracefully: %w", err)
+		}
+		return nil
+	}
+}
+
 func parseEndpoint(endpoint string) (network, addr string, err error) {
 	lowerEp := strings.ToLower(endpoint)
 	if strings.HasPrefix(lowerEp, "unix://") || strings.HasPrefix(lowerEp, "tcp://") {
@@ -153,7 +168,9 @@ func parseEndpoint(endpoint string) (network, addr string, err error) {
 	return "", "", fmt.Errorf("invalid endpoint format: %s", endpoint)
 }
 
-func stopGRPCServer(ctx context.Context, serv *grpc.Server) (gracefully bool) {
+var errForcedShutdown = errors.New("forced shutdown")
+
+func stopGRPCServer(ctx context.Context, serv *grpc.Server) error {
 	stop := make(chan struct{})
 
 	go func() {
@@ -163,11 +180,11 @@ func stopGRPCServer(ctx context.Context, serv *grpc.Server) (gracefully bool) {
 
 	select {
 	case <-stop:
-		return true
+		return nil
 	case <-ctx.Done():
 		serv.Stop()
 	}
-	return false
+	return errForcedShutdown
 }
 
 func logInterceptor() grpc.UnaryServerInterceptor {

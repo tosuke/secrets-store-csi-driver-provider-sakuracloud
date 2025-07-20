@@ -10,7 +10,7 @@ ENV GOARCH=$TARGETARCH
 RUN --mount=type=cache,target=/go/pkg/mod,sharing=locked \
     --mount=type=cache,target=/root/.cache/go-build,sharing=locked \
     --mount=type=bind,source=.,target=. \
-    go build -o /bin/provider -ldflags="-s -w" -trimpath .
+    go build -o /bin/provider -ldflags="-s -w" -trimpath ./cmd
 
 FROM gcr.io/distroless/static-debian12 AS artifact
 WORKDIR /app

@@ -25,7 +25,9 @@ This project is a provider for the Kubernetes Secrets Store CSI Driver, specific
 
 ## Repository Structure
 
+- `cmd/`: Contains the main application entrypoint.
 - `server/`: Contains the gRPC server implementation.
+- `config/`: Contains configuration parsing logic.
 - `e2e/`: End-to-end tests.
 - `Dockerfile`: Used to build the Docker image.
 - `Makefile`: Contains helper commands for development.
