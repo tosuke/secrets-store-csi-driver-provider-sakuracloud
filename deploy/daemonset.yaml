@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  namespace: kube-system
+  name: secrets-store-csi-driver-provider-sakuracloud
+  labels:
+    app: secrets-store-csi-driver-provider-sakuracloud
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: secrets-store-csi-driver-provider-sakuracloud
+  template:
+    metadata:
+      labels:
+        app: secrets-store-csi-driver-provider-sakuracloud
+    spec:
+      serviceAccountName: secrets-store-csi-driver-provider-sakuracloud
+      hostNetwork: false
+      containers:
+        - name: provider-sakuracloud
+          image: ghcr.io/tosuke/secrets-store-csi-driver-provider-sakuracloud:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --endpoint=unix:///var/run/provider/sakuracloud.sock
+            - --healthz-addr=0.0.0.0:8080
+          env:
+            - name: SAKURACLOUD_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: sakuracloud-credentials
+                  key: access-token
+            - name: SAKURACLOUD_ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sakuracloud-credentials
+                  key: access-token-secret
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8080
+            failureThreshold: 3
+            initialDelaySeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 50Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 0
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - mountPath: /var/run/provider
+              name: providervol
+      volumes:
+        - name: providervol
+          hostPath:
+            path: /var/run/secrets-store-csi-providers
+      nodeSelector:
+        kubernetes.io/os: linux
