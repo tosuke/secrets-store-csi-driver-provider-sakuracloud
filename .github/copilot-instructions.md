@@ -32,5 +32,5 @@ This project is a provider for the Kubernetes Secrets Store CSI Driver, specific
 
 ## Commit and Pull Request Conventions
 
-- Pull Request titles and commit messages should follow the Conventional Commits specification.
+- Pull Request titles and commit messages should follow the Conventional Commits specification (https://www.conventionalcommits.org/en/v1.0.0/). This means commit messages should be structured as `<type>(<scope>): <description>`, for example, `feat: add new feature` or `fix: resolve bug`. This helps in generating changelogs and understanding the nature of changes.
 - Each commit should represent a single logical change (e.g., a new feature, a bug fix, a documentation update).
