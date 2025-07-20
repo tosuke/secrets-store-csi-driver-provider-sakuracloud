@@ -29,7 +29,7 @@ func TestParse(t *testing.T) {
 
 				VaultID: "1234",
 				Secrets: config.Secrets{
-					{Name: "secret1"},
+					{VaultID: "1234", Name: "secret1"},
 					{VaultID: "5678", Name: "secret2"},
 				},
 			},
@@ -48,7 +48,7 @@ func TestParse(t *testing.T) {
 
 				VaultID: "1234",
 				Secrets: config.Secrets{
-					{Name: "secret1", Version: ptr(1)},
+					{VaultID: "1234", Name: "secret1", Version: ptr(1)},
 					{VaultID: "5678", Name: "secret2", Version: ptr(2)},
 				},
 			},
