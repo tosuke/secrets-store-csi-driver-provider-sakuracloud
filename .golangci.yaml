@@ -27,6 +27,7 @@ linters:
     - testpackage
     - tparallel
     - wastedassign
+    - copyloopvar
   exclusions:
     rules:
       - path: _test\.go

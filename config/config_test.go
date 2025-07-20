@@ -171,7 +171,7 @@ func TestSecretID(t *testing.T) {
 	}
 
 	for _, tt := range cases {
-		tt := tt
+		
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			if got := tt.in.ID(); got != tt.want {
@@ -215,7 +215,7 @@ func TestSecretFilePath(t *testing.T) {
 	}
 
 	for _, tt := range cases {
-		tt := tt
+		
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			if got := tt.in.FilePath(); got != tt.want {
