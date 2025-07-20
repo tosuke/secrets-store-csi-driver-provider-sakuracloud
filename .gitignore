@@ -17,3 +17,6 @@ secrets-store-csi-driver-provider-sakuracloud
 
 # Output of the go coverage tool
 *.out
+
+# Temporary files
+*.tar.gz
