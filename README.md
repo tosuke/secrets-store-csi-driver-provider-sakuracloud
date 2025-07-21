@@ -18,7 +18,7 @@ This is a provider for the [Kubernetes Secrets Store CSI Driver](https://secrets
 
     Apply the pre-built manifest from the GitHub releases:
     ```bash
-    kubectl apply -f https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/releases/download/v0.1.1/deploy.yaml
+    kubectl apply -f https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/releases/download/v0.2.0/deploy.yaml
     ```
 
 2.  **Create Sakura Cloud Credentials Secret**
