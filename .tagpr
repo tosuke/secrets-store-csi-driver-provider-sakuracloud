@@ -17,4 +17,4 @@
 [tagpr]
 	vPrefix = true
 	releaseBranch = main
-	versionFile = cmd/version.go
+	versionFile = cmd/version.go,deploy/kustomization.yaml
