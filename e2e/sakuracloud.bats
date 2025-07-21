@@ -63,7 +63,7 @@ teardown_file() {
 
 @test "install sakuracloud provider" {
   # install sakuracloud provider
-  PROVIDER_DOCKER_IMAGE=$PROVIDER_DOCKER_IMAGE envsubst < manifest/installer.yaml | kubectl apply --server-side -f -
+  kubectl apply --server-side -k manifest/installer
 
   # wait for pods
   kubectl wait --for condition=Ready --timeout 60s pods --namespace $PROVIDER_NAMESPACE -l app=secrets-store-csi-driver-provider-sakuracloud

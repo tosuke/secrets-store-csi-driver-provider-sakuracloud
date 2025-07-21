@@ -6,11 +6,30 @@ This is a provider for the [Kubernetes Secrets Store CSI Driver](https://secrets
 
 - Fetches secrets from Sakura Cloud Secret Manager.
 - Mounts secrets as files into pods.
-- Supports specifying `vaultID` and a list of secrets in the `SecretProviderClass`.
+
+## Requirements
+
+- Kubernetes cluster (v1.16+)
+- [Secrets Store CSI Driver](https://secrets-store-csi-driver.sigs.k8s.io/docs/getting-started/installation/) installed in your cluster.
 
 ## Installation
 
-TODO
+1.  **Install the Provider**
+
+    Apply the pre-built manifest from the GitHub releases:
+    ```bash
+    kubectl apply -f https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/releases/download/v0.1.1/deploy.yaml
+    ```
+
+2.  **Create Sakura Cloud Credentials Secret**
+
+    The provider needs your Sakura Cloud API credentials to fetch secrets. Create a Kubernetes secret named `sakuracloud-credentials` in the `kube-system` namespace.
+    ```bash
+    kubectl create secret generic sakuracloud-credentials \
+      --from-literal=access-token="YOUR_SAKURACLOUD_ACCESS_TOKEN" \
+      --from-literal=access-token-secret="YOUR_SAKURACLOUD_ACCESS_TOKEN_SECRET" \
+      -n kube-system
+    ```
 
 ## Usage
 

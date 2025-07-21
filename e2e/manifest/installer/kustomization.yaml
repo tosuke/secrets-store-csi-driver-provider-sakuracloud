@@ -1,0 +1,7 @@
+resources:
+  - ../../../deploy
+
+images:
+  - name: ghcr.io/tosuke/secrets-store-csi-driver-provider-sakuracloud
+    newName: secrets-store-csi-driver-provider-sakuracloud
+    newTag: test
