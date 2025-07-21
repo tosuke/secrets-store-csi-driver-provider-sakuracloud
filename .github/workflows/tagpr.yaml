@@ -1,10 +1,8 @@
 name: tagpr
-
 on:
   push:
     branches:
       - main
-
 jobs:
   tagpr:
     runs-on: ubuntu-latest
@@ -22,7 +20,6 @@ jobs:
         id: tagpr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   release-docker-image:
     needs: [tagpr]
     if: ${{ needs.tagpr.outputs.tag != '' }}

@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
 # aqua - Declarative CLI Version Manager
 # https://aquaproj.github.io/
@@ -8,12 +7,13 @@
 #   supported_envs:
 #   - all
 registries:
-- type: standard
-  ref: v4.387.0  # renovate: depName=aquaproj/aqua-registry
+  - type: standard
+    ref: v4.387.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-- name: golangci/golangci-lint@v2.2.2
-- name: sacloud/usacloud@v1.15.0
-- name: kubernetes-sigs/kind@v0.29.0
-- name: helm/helm@v3.18.4
-- name: kubernetes/kubernetes/kubectl@v1.33.3
-- name: bats-core/bats-core@v1.12.0
+  - name: golangci/golangci-lint@v2.2.2
+  - name: sacloud/usacloud@v1.15.0
+  - name: kubernetes-sigs/kind@v0.29.0
+  - name: helm/helm@v3.18.4
+  - name: kubernetes/kubernetes/kubectl@v1.33.3
+  - name: bats-core/bats-core@v1.12.0
+  - name: google/yamlfmt@v0.13.0
