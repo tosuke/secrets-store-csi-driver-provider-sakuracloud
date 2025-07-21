@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.2.0](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.1.1...v0.2.0) - 2025-07-21
+### New Features
+- feat: add support for retrieving secrets with a specific version by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/23
+- feat: enable specification of mount path for secrets by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/45
+### Other Changes
+- chore(deps): update dependency aquaproj/aqua to v2.53.5 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/33
+- Add Docker build caching with save-cache flag by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/35
+- chore(ci): conditional k8s-version matrix for e2e-test workflow and pass is-pr from caller by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/36
+- chore(deps): update dependency aquaproj/aqua-registry to v4.387.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/37
+- refactor: repository structure by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/38
+- feat: add Copilot Setup Steps workflow for development environment by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/41
+- docs: add comprehensive SecretProviderClass parameter documentation by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/47
+- feat(deploy): add Kubernetes manifests distribution with Kustomization by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/46
+
 ## [v0.1.1](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.1.0...v0.1.1) - 2025-07-19
 ### Other Changes
 - chore: pin actions digests by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/4
