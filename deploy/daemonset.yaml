@@ -2,7 +2,6 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  namespace: kube-system
   name: secrets-store-csi-driver-provider-sakuracloud
   labels:
     app: secrets-store-csi-driver-provider-sakuracloud
