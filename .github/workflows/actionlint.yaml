@@ -1,8 +1,10 @@
 name: actionlint
+
 on:
   push:
     branches: ["main"]
   pull_request:
+
 jobs:
   actionlint:
     name: Actionlint
