@@ -6,7 +6,7 @@ require (
 	github.com/go-faster/yaml v0.4.6
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/secretmanager-api-go v0.2.1
-	google.golang.org/grpc v1.73.0
+	google.golang.org/grpc v1.74.1
 	sigs.k8s.io/secrets-store-csi-driver v1.5.2
 )
 
@@ -17,7 +17,6 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect
 	github.com/go-faster/jx v1.1.0 // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.8 // indirect
