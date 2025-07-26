@@ -77,11 +77,6 @@ func run(cfg config) int {
 	}()
 
 	<-ctx.Done()
-	if err := context.Cause(ctx); !errors.Is(err, ctx.Err()) {
-		slog.ErrorContext(ctx, "Failed to run provider", "error", err)
-		return 1
-	}
-
 	slog.InfoContext(ctx, "Shutting down gracefully", "timeout", gracefulShutdownTimeout)
 	shutdownCtx, cancelShutdownTimeout := context.WithTimeout(context.WithoutCancel(ctx), gracefulShutdownTimeout)
 	_ = cancelShutdownTimeout
@@ -111,9 +106,9 @@ func setupProvider(ctx context.Context, cfg config) (shutdownFunc, error) {
 		}
 	}
 
-	listener, err := net.Listen(network, addr)
+	listener, err := (&net.ListenConfig{}).Listen(ctx, network, addr)
 	if err != nil {
-		return nil, fmt.Errorf("failed to listen on UDS: %w", err)
+		return nil, fmt.Errorf("failed to listen: %w", err)
 	}
 
 	go func() {
