@@ -17,3 +17,4 @@ packages:
 - name: helm/helm@v3.18.4
 - name: kubernetes/kubernetes/kubectl@v1.33.3
 - name: bats-core/bats-core@v1.12.0
+- name: google/yamlfmt@v0.13.0
