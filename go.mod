@@ -1,6 +1,7 @@
 module github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud
 
-go 1.24.4
+go 1.24
+toolchain go1.24.5
 
 require (
 	github.com/go-faster/yaml v0.4.6
@@ -22,6 +23,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.8 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/ogen-go/ogen v1.14.0 // indirect
 	github.com/sacloud/api-client-go v0.3.2 // indirect
 	github.com/sacloud/go-http v0.1.9 // indirect
@@ -37,5 +39,6 @@ require (
 	golang.org/x/text v0.26.0 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
+	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
