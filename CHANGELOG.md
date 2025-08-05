@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.2.1](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.0...v0.2.1) - 2025-08-05
+### Other Changes
+- fix(deps): update module google.golang.org/grpc to v1.74.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/52
+- chore(deps): update dependency aquaproj/aqua to v2.53.6 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/53
+- fix(deps): update module google.golang.org/grpc to v1.74.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/55
+- chore(deps): update dependency aquaproj/aqua-registry to v4.391.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/51
+- refactor: prefer use (*net.ListenConfig).Listen by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/56
+- chore(deps): update dependency golangci/golangci-lint to v2.3.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/54
+- fix(deps): update module sigs.k8s.io/secrets-store-csi-driver to v1.5.3 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/57
+- chore(deps): update dependency aquaproj/aqua to v2.53.7 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/59
+- chore(deps): update docker/metadata-action action to v5.8.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/61
+- chore: bundle licenses by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/62
+
 ## [v0.2.0](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.1.1...v0.2.0) - 2025-07-21
 ### New Features
 - feat: add support for retrieving secrets with a specific version by @Copilot in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/23
