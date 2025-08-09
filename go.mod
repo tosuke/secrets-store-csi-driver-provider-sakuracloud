@@ -1,7 +1,8 @@
 module github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud
 
 go 1.24
-toolchain go1.24.5
+
+toolchain go1.24.6
 
 require (
 	github.com/go-faster/yaml v0.4.6
