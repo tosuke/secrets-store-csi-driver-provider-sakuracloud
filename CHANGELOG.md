@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.2](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.1...v0.2.2) - 2025-08-11
+### Other Changes
+- chore(deps): update dependency golangci/golangci-lint to v2.3.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/63
+- chore(deps): update reviewdog/action-actionlint action to v1.66.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/65
+- chore(deps): update docker/login-action action to v3.5.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/66
+- chore(deps): update actions/cache action to v4.2.4 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/68
+- chore(deps): update dependency go to v1.24.6 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/67
+
 ## [v0.2.1](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.0...v0.2.1) - 2025-08-05
 ### Other Changes
 - fix(deps): update module google.golang.org/grpc to v1.74.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/52
