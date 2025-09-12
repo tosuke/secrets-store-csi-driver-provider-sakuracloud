@@ -8,7 +8,7 @@ require (
 	github.com/go-faster/yaml v0.4.6
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/secretmanager-api-go v0.2.1
-	google.golang.org/grpc v1.75.0
+	google.golang.org/grpc v1.75.1
 	sigs.k8s.io/secrets-store-csi-driver v1.5.3
 )
 
