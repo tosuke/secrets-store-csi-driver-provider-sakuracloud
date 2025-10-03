@@ -1,5 +1,36 @@
 # Changelog
 
+## [v0.2.2](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.1...v0.2.2) - 2025-10-03
+### Other Changes
+- chore(deps): update dependency golangci/golangci-lint to v2.3.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/63
+- chore(deps): update reviewdog/action-actionlint action to v1.66.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/65
+- chore(deps): update docker/login-action action to v3.5.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/66
+- chore(deps): update actions/cache action to v4.2.4 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/68
+- chore(deps): update dependency go to v1.24.6 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/67
+- chore(deps): update actions/checkout action to v5 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/70
+- chore(deps): update dependency helm/helm to v3.18.5 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/72
+- chore(deps): update dependency golangci/golangci-lint to v2.4.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/74
+- chore(deps): update dependency kubernetes/kubernetes/kubectl to v1.33.4 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/73
+- chore(deps): update dependency go to v1.25.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/71
+- chore(deps): update reviewdog/action-actionlint action to v1.66.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/75
+- chore(deps): update dependency helm/helm to v3.18.6 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/77
+- fix(deps): update module google.golang.org/grpc to v1.75.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/76
+- chore(deps): update dependency aquaproj/aqua to v2.53.9 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/60
+- chore(deps): update dependency aquaproj/aqua-registry to v4.404.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/58
+- chore(deps): update reviewdog/action-actionlint action to v1.67.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/83
+- chore(deps): update songmu/tagpr action to v1.7.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/85
+- chore(deps): update songmu/tagpr action to v1.8.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/88
+- chore(deps): update songmu/tagpr action to v1.8.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/89
+- chore(deps): update songmu/tagpr action to v1.8.4 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/90
+- chore(deps): update songmu/tagpr action to v1.9.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/92
+- chore(deps): update actions/attest-build-provenance action to v3 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/82
+- chore(deps): update actions/setup-go action to v6 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/84
+- chore(deps): update aquaproj/aqua-installer action to v4.0.3 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/86
+- fix(deps): update module google.golang.org/grpc to v1.75.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/91
+- chore(deps): update dependency go to v1.25.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/81
+- chore(deps): update actions/cache action to v4.3.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/95
+- chore(deps): update docker/login-action action to v3.6.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/97
+
 ## [v0.2.1](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.0...v0.2.1) - 2025-08-05
 ### Other Changes
 - fix(deps): update module google.golang.org/grpc to v1.74.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/52
