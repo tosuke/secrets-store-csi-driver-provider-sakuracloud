@@ -1,6 +1,6 @@
 module github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud
 
-go 1.24
+go 1.24.7
 
 toolchain go1.25.1
 
@@ -9,7 +9,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/secretmanager-api-go v0.2.1
 	google.golang.org/grpc v1.75.1
-	sigs.k8s.io/secrets-store-csi-driver v1.5.3
+	sigs.k8s.io/secrets-store-csi-driver v1.5.4
 )
 
 require (
