@@ -1,6 +1,6 @@
 module github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud
 
-go 1.24
+go 1.24.0
 
 toolchain go1.25.1
 
@@ -8,7 +8,7 @@ require (
 	github.com/go-faster/yaml v0.4.6
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/secretmanager-api-go v0.2.1
-	google.golang.org/grpc v1.75.1
+	google.golang.org/grpc v1.76.0
 	sigs.k8s.io/secrets-store-csi-driver v1.5.3
 )
 
@@ -34,10 +34,10 @@ require (
 	go.uber.org/ratelimit v0.3.1 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
-	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
