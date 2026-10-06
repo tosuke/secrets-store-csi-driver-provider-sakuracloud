@@ -5,8 +5,8 @@ import (
 	"io/fs"
 	"strconv"
 
-	sacloudsm "github.com/sacloud/secretmanager-api-go"
-	sacloudsmv1 "github.com/sacloud/secretmanager-api-go/apis/v1"
+	"github.com/sacloud/sacloud-sdk-go/api/secretmanager"
+	sacloudsmv1 "github.com/sacloud/sacloud-sdk-go/api/secretmanager/apis/v1"
 	"github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/config"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -73,27 +73,18 @@ func (s *Server) Mount(ctx context.Context, req *providerv1alpha1.MountRequest) 
 func retrieveSecret(
 	ctx context.Context, client *sacloudsmv1.Client, permission fs.FileMode, secret *config.Secret,
 ) (*providerv1alpha1.ObjectVersion, *providerv1alpha1.File, error) {
-	secretOp := sacloudsm.NewSecretOp(client, secret.VaultID)
-
-	unveilRequest := sacloudsmv1.Unveil{
-		Name: secret.Name,
-	}
-	if secret.Version != nil {
-		unveilRequest.SetVersion(sacloudsmv1.NewOptNilInt(*secret.Version))
-	}
-
-	unveilResult, err := secretOp.Unveil(ctx, unveilRequest)
+	secretOp := secretmanager.NewSecretOp(client, secret.VaultID)
+	unveilResult, err := secretOp.Unveil(ctx, secretmanager.UnveilParams{
+		Name:    secret.Name,
+		Version: secret.Version,
+	})
 	if err != nil {
 		return nil, nil, status.Errorf(codes.Internal, "failed to unveil secret %q in vault %q: %v", secret.Name, secret.VaultID, err)
 	}
 
-	var version string
-	if ver, ok := unveilResult.GetVersion().Get(); ok {
-		version = strconv.Itoa(ver)
-	}
 	ov := &providerv1alpha1.ObjectVersion{
 		Id:      secret.ID(),
-		Version: version,
+		Version: strconv.Itoa(unveilResult.GetVersion()),
 	}
 	file := &providerv1alpha1.File{
 		Path:     secret.FilePath(),

@@ -15,7 +15,8 @@ import (
 	"syscall"
 	"time"
 
-	sacloudsm "github.com/sacloud/secretmanager-api-go"
+	"github.com/sacloud/sacloud-sdk-go/api/secretmanager"
+	"github.com/sacloud/sacloud-sdk-go/common/saclient"
 	"github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
@@ -25,7 +26,7 @@ import (
 func main() {
 	var cfg config
 	flag.StringVar(&cfg.endpoint, "endpoint", "unix:///tmp/sakuracloud.sock", "gRPC endpoint to connect to the provider")
-	flag.StringVar(&cfg.secretManagerAPIURL, "secretmanager-api-url", sacloudsm.DefaultAPIRootURL, "Secret Manager API root URL")
+	flag.StringVar(&cfg.secretManagerAPIURL, "secretmanager-api-url", secretmanager.DefaultAPIRootURL, "Secret Manager API root URL")
 	flag.TextVar(&cfg.healthzAddr, "healthz-addr", netip.MustParseAddrPort("0.0.0.0:8080"), "Healthz addr")
 
 	var versionFlag bool
@@ -90,7 +91,12 @@ func run(cfg config) int {
 type shutdownFunc func(context.Context) error
 
 func setupProvider(ctx context.Context, cfg config) (shutdownFunc, error) {
-	client, err := sacloudsm.NewClientWithApiUrl(cfg.secretManagerAPIURL)
+	var apiClient saclient.Client
+	env := append(os.Environ(), "SAKURA_ENDPOINTS_SECRETMANAGER="+cfg.secretManagerAPIURL)
+	if err := apiClient.SetEnviron(env); err != nil {
+		return nil, fmt.Errorf("failed to configure Secret Manager client: %w", err)
+	}
+	client, err := secretmanager.NewClient(&apiClient)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Secret Manager client: %w", err)
 	}

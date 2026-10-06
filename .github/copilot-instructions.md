@@ -9,7 +9,7 @@ This project is a provider for the Kubernetes Secrets Store CSI Driver, specific
 1. A user defines a `SecretProviderClass` Kubernetes resource.
 2. The Secrets Store CSI Driver communicates with this provider.
 3. The provider's `Mount` function is invoked.
-4. It uses the `secretmanager-api-go` library to call the Sakura Cloud Secret Manager API.
+4. It uses the Secret Manager client from `github.com/sacloud/sacloud-sdk-go` to call the Sakura Cloud Secret Manager API.
 5. The secrets are returned to the CSI driver and written to the pod's volume.
 
 ## Key Technologies

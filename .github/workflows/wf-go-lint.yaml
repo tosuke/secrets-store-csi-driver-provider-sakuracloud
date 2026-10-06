@@ -40,4 +40,5 @@ jobs:
       - name: Install go-licenses
         run: go install github.com/google/go-licenses@v${{ env.GOLICENSES_VERSION }}
       - name: Check license compliance
-        run: go-licenses check ./...
+        # asm's MIT-0 license is bundled explicitly in Dockerfile.
+        run: go-licenses check ./... --ignore=github.com/segmentio/asm/
