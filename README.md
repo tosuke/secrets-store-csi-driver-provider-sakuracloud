@@ -212,17 +212,16 @@ spec:
 
 ### Running Tests
 
-To run the end-to-end tests, you need to set the following environment variables:
-
-- `SAKURACLOUD_ACCESS_TOKEN`: Your Sakura Cloud API access token.
-- `SAKURACLOUD_ACCESS_TOKEN_SECRET`: Your Sakura Cloud API access token secret.
-- `SAKURACLOUD_VAULT_ID`: The ID of the Sakura Cloud Secret Manager Vault to use for tests.
+End-to-end tests use [sakumock](https://github.com/sacloud/sakumock) inside a kind
+cluster. The tests create their own vault and secrets and use dummy credentials;
+no Sakura Cloud account or real API credentials are needed. Docker must be running,
+and `curl`, `jq`, and `envsubst` must be available in addition to the Aqua tools.
 
 ```bash
-export SAKURACLOUD_ACCESS_TOKEN="your-access-token"
-export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"
-export SAKURACLOUD_VAULT_ID="your-vault-id"
+aqua install
+kind create cluster --config e2e/kind.yaml --wait 300s
 make e2e-test
+kind delete cluster
 ```
 
 ## License

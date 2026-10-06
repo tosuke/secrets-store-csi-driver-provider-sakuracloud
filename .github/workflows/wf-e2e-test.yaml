@@ -6,13 +6,6 @@ on:
       is-pr:
         required: true
         type: boolean
-    secrets:
-      SAKURACLOUD_ACCESS_TOKEN:
-        required: true
-      SAKURACLOUD_ACCESS_TOKEN_SECRET:
-        required: true
-      SAKURACLOUD_TEST_VAULT_ID:
-        required: true
 
 permissions:
   contents: read
@@ -20,9 +13,6 @@ permissions:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.is-pr && 'sacloud-pr' || 'sacloud' }}
-      url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,15 +34,11 @@ jobs:
 
       - name: Create kind cluster
         run: |
-          kind create cluster --wait 300s --image "kindest/node:$K8S_VERSION"
+          kind create cluster --config e2e/kind.yaml --wait 300s --image "kindest/node:$K8S_VERSION"
         env:
           K8S_VERSION: ${{ matrix.k8s-version }}
 
       - name: Run E2E tests
-        env:
-          SAKURACLOUD_ACCESS_TOKEN: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN }}
-          SAKURACLOUD_ACCESS_TOKEN_SECRET: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN_SECRET }}
-          SAKURACLOUD_VAULT_ID: ${{ secrets.SAKURACLOUD_TEST_VAULT_ID }}
         run: |
           make e2e-test
 
