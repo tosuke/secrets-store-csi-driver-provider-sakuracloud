@@ -26,7 +26,6 @@ import (
 func main() {
 	var cfg config
 	flag.StringVar(&cfg.endpoint, "endpoint", "unix:///tmp/sakuracloud.sock", "gRPC endpoint to connect to the provider")
-	flag.StringVar(&cfg.secretManagerAPIURL, "secretmanager-api-url", secretmanager.DefaultAPIRootURL, "Secret Manager API root URL")
 	flag.TextVar(&cfg.healthzAddr, "healthz-addr", netip.MustParseAddrPort("0.0.0.0:8080"), "Healthz addr")
 
 	var versionFlag bool
@@ -42,9 +41,8 @@ func main() {
 }
 
 type config struct {
-	endpoint            string
-	secretManagerAPIURL string
-	healthzAddr         netip.AddrPort
+	endpoint    string
+	healthzAddr netip.AddrPort
 }
 
 const (
@@ -92,10 +90,6 @@ type shutdownFunc func(context.Context) error
 
 func setupProvider(ctx context.Context, cfg config) (shutdownFunc, error) {
 	var apiClient saclient.Client
-	env := append(os.Environ(), "SAKURA_ENDPOINTS_SECRETMANAGER="+cfg.secretManagerAPIURL)
-	if err := apiClient.SetEnviron(env); err != nil {
-		return nil, fmt.Errorf("failed to configure Secret Manager client: %w", err)
-	}
 	client, err := secretmanager.NewClient(&apiClient)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Secret Manager client: %w", err)
