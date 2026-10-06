@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       - uses: aquaproj/aqua-installer@96a9bc20066c5bf5e275b41019cfc165b25f4e2e # v4.0.5
         with:
-          aqua_version: v2.63.0
+          aqua_version: v2.64.0
       - name: Build deploy.yaml
         run: |
           kubectl kustomize -o deploy.yaml ./deploy
