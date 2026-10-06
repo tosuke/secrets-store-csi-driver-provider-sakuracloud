@@ -1,13 +1,11 @@
 module github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud
 
-go 1.25.0
-
-toolchain go1.25.1
+go 1.25.5
 
 require (
 	github.com/go-faster/yaml v0.4.6
 	github.com/google/go-cmp v0.7.0
-	github.com/sacloud/secretmanager-api-go v0.2.1
+	github.com/sacloud/secretmanager-api-go v0.4.2
 	google.golang.org/grpc v1.84.0
 	sigs.k8s.io/secrets-store-csi-driver v1.5.3
 )
@@ -19,16 +17,18 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect
 	github.com/go-faster/jx v1.1.0 // indirect
+	github.com/gofrs/flock v0.13.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.8 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/ogen-go/ogen v1.14.0 // indirect
-	github.com/sacloud/api-client-go v0.3.2 // indirect
+	github.com/sacloud/api-client-go v0.3.5 // indirect
 	github.com/sacloud/go-http v0.1.9 // indirect
-	github.com/sacloud/packages-go v0.0.11 // indirect
+	github.com/sacloud/packages-go v0.0.12 // indirect
+	github.com/sacloud/saclient-go v0.3.6 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/ratelimit v0.3.1 // indirect
@@ -40,6 +40,5 @@ require (
 	golang.org/x/text v0.40.0 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
