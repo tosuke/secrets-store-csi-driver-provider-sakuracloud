@@ -5,3 +5,12 @@ images:
   - name: ghcr.io/tosuke/secrets-store-csi-driver-provider-sakuracloud
     newName: secrets-store-csi-driver-provider-sakuracloud
     newTag: test
+
+patches:
+  - target:
+      kind: DaemonSet
+      name: secrets-store-csi-driver-provider-sakuracloud
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --secretmanager-api-url=http://sakumock.kube-system.svc.cluster.local:18082

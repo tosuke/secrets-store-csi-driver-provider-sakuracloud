@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-system
+  name: sakumock
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sakumock
+  template:
+    metadata:
+      labels:
+        app: sakumock
+    spec:
+      containers:
+        - name: sakumock
+          image: ghcr.io/sacloud/sakumock:0.9.1
+          args:
+            - secretmanager
+            - --addr=0.0.0.0:18082
+          ports:
+            - name: http
+              containerPort: 18082
+          readinessProbe:
+            httpGet:
+              path: /secretmanager/vaults
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-system
+  name: sakumock
+spec:
+  type: NodePort
+  selector:
+    app: sakumock
+  ports:
+    - name: http
+      port: 18082
+      targetPort: http
+      nodePort: 30082

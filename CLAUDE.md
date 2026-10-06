@@ -25,11 +25,10 @@ The provider works by:
 # Run unit tests
 go test ./...
 
-# Run end-to-end tests (requires environment variables)
-export SAKURACLOUD_ACCESS_TOKEN="your-access-token"
-export SAKURACLOUD_ACCESS_TOKEN_SECRET="your-access-token-secret"
-export SAKURACLOUD_VAULT_ID="your-vault-id"
+# Run end-to-end tests against sakumock (requires Docker, curl, jq, envsubst)
+kind create cluster --config e2e/kind.yaml --wait 300s
 make e2e-test
+kind delete cluster
 
 # Build Docker image
 docker build -t secrets-store-csi-driver-provider-sakuracloud:test .
@@ -51,7 +50,6 @@ The project uses [Aqua](https://aquaproj.github.io/) for tool management. Key to
 - kind for Kubernetes testing
 - kubectl, helm for Kubernetes operations
 - bats for e2e testing
-- usacloud for Sakura Cloud API operations
 
 ## Configuration Structure
 
@@ -63,10 +61,10 @@ The provider accepts configuration via SecretProviderClass parameters:
 
 - Unit tests: Standard Go tests.
 - E2E tests: BATS tests in `e2e/sakuracloud.bats` that:
-  - Set up a kind cluster
+  - Use an existing dedicated kind cluster
   - Install Secrets Store CSI Driver via Helm
   - Build and load the provider Docker image
-  - Create test secrets in Sakura Cloud
+  - Run sakumock in the cluster and create test vaults and secrets with dummy credentials
   - Verify secret mounting functionality
 
 ## Important Files
