@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: sakumock
-          image: ghcr.io/sacloud/sakumock:0.9.1
+          image: ghcr.io/sacloud/sakumock:0.12.0
           args:
             - secretmanager
             - --addr=0.0.0.0:18082

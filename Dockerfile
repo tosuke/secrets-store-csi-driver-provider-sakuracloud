@@ -21,8 +21,11 @@ RUN --mount=type=cache,target=/root/.cache/go-build,sharing=private \
     go build -o /bin/provider -ldflags="-s -w" -trimpath ./cmd
 
 FROM --platform=$BUILDPLATFORM base AS licenses
+# go-licenses does not recognize asm's MIT-0 license; bundle it explicitly.
 RUN --mount=type=bind,source=.,target=. \
-    go-licenses save ./cmd --save_path /licenses --force
+    go-licenses save ./cmd --save_path /licenses --force --ignore=github.com/segmentio/asm/ && \
+    mkdir -p /licenses/github.com/segmentio/asm && \
+    cp "$(go list -m -f '{{.Dir}}' github.com/segmentio/asm)/LICENSE" /licenses/github.com/segmentio/asm/LICENSE
 RUN --mount=type=bind,source=.,target=. \
     mkdir -p /licenses/go && \
     curl -Lq -o /licenses/go/LICENSE https://raw.githubusercontent.com/golang/go/refs/tags/$(go env GOVERSION)/LICENSE

@@ -15,7 +15,7 @@ This is a Kubernetes Secrets Store CSI Driver provider for Sakura Cloud Secret M
 The provider works by:
 1. Receiving mount requests from the Secrets Store CSI Driver
 2. Parsing SecretProviderClass configuration to extract vaultID and secret names
-3. Using the `sacloud/secretmanager-api-go` client to fetch secrets from Sakura Cloud
+3. Using the `sacloud/sacloud-sdk-go` Secret Manager client to fetch secrets from Sakura Cloud
 4. Returning secret contents as files to be mounted in the pod
 
 ## Development Commands
