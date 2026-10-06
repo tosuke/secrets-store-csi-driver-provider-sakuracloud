@@ -19,7 +19,7 @@ jobs:
         k8s-version: ${{ fromJSON(inputs.is-pr && '["v1.33.1"]' || '["v1.31.6", "v1.32.3", "v1.33.1"]') }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
