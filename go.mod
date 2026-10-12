@@ -9,7 +9,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/sacloud/sacloud-sdk-go v0.3.0
 	google.golang.org/grpc v1.84.0
-	sigs.k8s.io/secrets-store-csi-driver v1.5.3
+	sigs.k8s.io/secrets-store-csi-driver v1.6.1
 )
 
 require (
@@ -39,6 +39,6 @@ require (
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
