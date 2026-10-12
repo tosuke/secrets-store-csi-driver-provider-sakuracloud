@@ -13,6 +13,7 @@ on:
 
 jobs:
   copilot-setup-steps:
+    # Copilot requires an x64 runner; retain a VM for Docker-based development.
     runs-on: ubuntu-latest
 
     permissions:
