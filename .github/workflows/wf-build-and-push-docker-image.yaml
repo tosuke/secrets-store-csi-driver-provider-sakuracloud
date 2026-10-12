@@ -61,8 +61,10 @@ jobs:
           cache-to: ${{ inputs.save-cache && 'type=gha,mode=max' || '' }}
       - name: Attest
         if: ${{ inputs.push }}
-        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-name: ghcr.io/${{ inputs.image_name }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+          # Storage records are only supported for organization-owned repositories.
+          create-storage-record: false
