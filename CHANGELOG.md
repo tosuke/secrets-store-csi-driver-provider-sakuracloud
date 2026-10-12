@@ -1,5 +1,20 @@
 # Changelog
 
+## [v0.2.3](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.2...v0.2.3) - 2026-10-12
+
+### Other Changes
+- chore(deps): update go toolchain directive to v1.27.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/100
+- chore(deps): update reviewdog/action-actionlint action to v1.79.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/135
+- chore(deps): update reviewdog/action-actionlint action to v1.79.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/136
+- chore(deps): update songmu/tagpr action to v1.21.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/137
+- chore(deps): update dependency aquaproj/aqua-registry to v4.573.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/138
+- chore(deps): update reviewdog/action-actionlint action to v1.80.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/140
+- chore(deps): update dependency aquaproj/aqua-registry to v4.573.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/141
+- chore(deps): update go toolchain directive to v1.27.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/139
+- fix(deps): update module sigs.k8s.io/secrets-store-csi-driver to v1.6.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/132
+- chore(ci): use actions/attest by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/142
+- chore(ci): use arm/slim runner by @tosuke in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/143
+
 ## [v0.2.2](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.1...v0.2.2) - 2026-10-06
 
 ### Other Changes
