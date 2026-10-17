@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.2.4](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.3...v0.2.4) - 2026-10-17
+
+### Other Changes
+- chore(deps): update dependency aquaproj/aqua-registry to v4.574.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/144
+- chore(deps): update dependency aquaproj/aqua-registry to v4.574.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/146
+- chore(deps): update dependency aquaproj/aqua-registry to v4.575.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/148
+
 ## [v0.2.3](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.2...v0.2.3) - 2026-10-12
 
 ### Other Changes
