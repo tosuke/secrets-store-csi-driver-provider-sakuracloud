@@ -7,7 +7,7 @@ toolchain go1.27.2
 require (
 	github.com/go-faster/yaml v0.4.6
 	github.com/google/go-cmp v0.7.0
-	github.com/sacloud/sacloud-sdk-go v0.3.0
+	github.com/sacloud/sacloud-sdk-go v0.4.0
 	google.golang.org/grpc v1.84.0
 	sigs.k8s.io/secrets-store-csi-driver v1.6.1
 )
@@ -19,6 +19,7 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/errors v0.8.0 // indirect
 	github.com/go-faster/jx v1.2.0 // indirect
+	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/gofrs/flock v0.13.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -34,7 +35,7 @@ require (
 	go.uber.org/ratelimit v0.3.1 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
-	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/net v0.59.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
