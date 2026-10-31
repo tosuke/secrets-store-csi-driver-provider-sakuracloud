@@ -1,5 +1,22 @@
 # Changelog
 
+## [v0.2.4](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.3...v0.2.4) - 2026-10-31
+
+### Other Changes
+- chore(deps): update dependency aquaproj/aqua-registry to v4.574.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/144
+- chore(deps): update dependency aquaproj/aqua-registry to v4.574.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/146
+- chore(deps): update dependency aquaproj/aqua-registry to v4.575.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/148
+- chore(deps): update songmu/tagpr action to v1.21.3 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/150
+- chore(deps): update dependency aquaproj/aqua to v2.65.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/155
+- chore(deps): update dependency aqua to v2.65.2 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/154
+- chore(deps): update aquaproj/aqua-installer action to v4.1.1 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/156
+- chore(deps): update songmu/tagpr action to v1.21.4 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/157
+- chore(deps): update docker/login-action action to v4.7.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/158
+- chore(deps): update dependency aquaproj/aqua-registry to v4.576.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/159
+- chore(deps): update dependency aquaproj/aqua-registry to v4.577.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/160
+- chore(deps): update dependency aquaproj/aqua-registry to v4.578.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/161
+- chore(deps): update dependency aquaproj/aqua-registry to v4.579.0 by @renovate[bot] in https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/pull/163
+
 ## [v0.2.3](https://github.com/tosuke/secrets-store-csi-driver-provider-sakuracloud/compare/v0.2.2...v0.2.3) - 2026-10-12
 
 ### Other Changes
