@@ -17,7 +17,7 @@ jobs:
       - name: Install Aqua
         uses: aquaproj/aqua-installer@611554c6f0137ba41c8dd15aca8bee82504ea461 # v4.1.1
         with:
-          aqua_version: v2.66.0
+          aqua_version: v2.66.1
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
